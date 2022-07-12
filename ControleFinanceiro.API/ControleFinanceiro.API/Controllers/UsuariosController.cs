@@ -1,4 +1,5 @@
-﻿using ControleFinanceiro.API.ViewModels;
+﻿using ControleFinanceiro.API.Services;
+using ControleFinanceiro.API.ViewModels;
 using ControleFinanceiro.BLL.Models;
 using ControleFinanceiro.DAL.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -86,12 +87,14 @@ namespace ControleFinanceiro.API.Controllers
                 if (usuarioCriado.Succeeded)
                 {
                     await _usuarioRepositorio.IncluirUsuarioEmFuncao(usuario, funcaoUsuario);
+                    var token = TokenService.GerarToken(usuario, funcaoUsuario);
                     await _usuarioRepositorio.LogarUsuario(usuario, false);
 
                     return Ok(new
                     {
                         emailUsuarioLogado = usuario.Email,
-                        usuarioId = usuario.Id
+                        usuarioId = usuario.Id,
+                        tokenUsuarioLogado = token
                     });
                 }
                 else
@@ -119,12 +122,15 @@ namespace ControleFinanceiro.API.Controllers
                 PasswordHasher<Usuario> passwordHasher =  new PasswordHasher<Usuario>();
                 if(passwordHasher.VerifyHashedPassword(usuario, usuario.PasswordHash, model.Senha) != PasswordVerificationResult.Failed)
                 {
+                    var funcoesUsuario = await _usuarioRepositorio.PegarFuncoesUsuario(usuario);
+                    var token = TokenService.GerarToken(usuario, funcoesUsuario.First());
                     await _usuarioRepositorio.LogarUsuario(usuario, false);
 
                     return Ok(new
                     {
                         emailUsuarioLogado = usuario.Email,
-                        usuarioId = usuario.Id
+                        usuarioId = usuario.Id,
+                        tokenUsuarioLogado = token
                     });
                 }
                 return NotFound("Usuário e/ou senha inválidos");

@@ -58,6 +58,18 @@ namespace ControleFinanceiro.DAL.Repositories
             }
         }
 
+        public async Task<IList<string>> PegarFuncoesUsuario(Usuario usuario)
+        {
+            try
+            {
+                return await _usuariosManager.GetRolesAsync(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<int> PegarQuantidadeUsuariosRegistrados()
         {
             try

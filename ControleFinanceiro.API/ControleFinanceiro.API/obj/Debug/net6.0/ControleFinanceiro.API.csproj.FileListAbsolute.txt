@@ -277,3 +277,5 @@ C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin
 C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin\Debug\net6.0\FluentValidation.dll
 C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
 C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\projects\ControleFinanceiro\ControleFinanceiro.API\ControleFinanceiro.API\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll

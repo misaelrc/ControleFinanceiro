@@ -1,3 +1,4 @@
+using ControleFinanceiro.API;
 using ControleFinanceiro.API.Extensions;
 using ControleFinanceiro.API.Validations;
 using ControleFinanceiro.API.ViewModels;
@@ -7,9 +8,11 @@ using ControleFinanceiro.DAL.Interfaces;
 using ControleFinanceiro.DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using System.Text.Json.Serialization;
-
+using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -32,6 +35,25 @@ builder.Services.AddSpaStaticFiles(directory =>
 {
     directory.RootPath = "ControleFinanceiro-UI";//caminho do front angular
 });
+var key = Encoding.ASCII.GetBytes(Settings.ChaveSecreta);
+
+builder.Services.AddAuthentication(opcoes =>
+{
+    opcoes.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opcoes.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(opcoes =>
+    {
+        opcoes.RequireHttpsMetadata = false;
+        opcoes.SaveToken = true;
+        opcoes.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 builder.Services.AddControllers()
     .AddFluentValidation()
@@ -59,6 +81,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
